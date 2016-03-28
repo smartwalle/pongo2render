@@ -20,7 +20,7 @@ type Render struct {
 	Cache       bool
 }
 
-type HTMLTemplate struct {
+type HTML struct {
 	Template *pongo2.Template
 	context  pongo2.Context
 }
@@ -31,7 +31,7 @@ func NewRender(templateDir string) *Render {
 	return r
 }
 
-func (this *Render) Template(name string) *HTMLTemplate {
+func (this *Render) HTML(name string) *HTML {
 	var template *pongo2.Template
 	var filename string
 	if len(this.TemplateDir) > 0 {
@@ -51,12 +51,12 @@ func (this *Render) Template(name string) *HTMLTemplate {
 		return nil
 	}
 
-	var r = &HTMLTemplate{}
+	var r = &HTML{}
 	r.Template = template
 	return r
 }
 
-func (this *HTMLTemplate) ExecuteWriter(w http.ResponseWriter, c pongo2.Context) (err error) {
+func (this *HTML) ExecuteWriter(w http.ResponseWriter, c pongo2.Context) (err error) {
 	WriteContentType(w, htmlContentType)
 	this.context = c
 	err = this.Template.ExecuteWriter(this.context, w)
