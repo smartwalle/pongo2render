@@ -31,7 +31,7 @@ func NewRender(templateDir string) *Render {
 	return r
 }
 
-func (this *Render) html(name string) *HTML {
+func (this *Render) GetHTML(name string) *HTML {
 	var template *pongo2.Template
 	var filename string
 	if len(this.TemplateDir) > 0 {
@@ -57,7 +57,7 @@ func (this *Render) html(name string) *HTML {
 }
 
 func (this *Render) HTML(w http.ResponseWriter, name string, data interface{}) {
-	this.html(name).ExecuteWriter(w, data)
+	this.GetHTML(name).ExecuteWriter(w, data)
 }
 
 func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {
