@@ -9,7 +9,7 @@ import (
 //	var render = pongo2render.NewRender("./templates")
 //
 //	http.HandleFunc("/m", func(w http.ResponseWriter, req *http.Request) {
-//		render.HTML(w, "index.html", pongo2.Context{"aa": "eeeeeee"})
+//		render.HTML(w, 200, "index.html", pongo2.Context{"aa": "eeeeeee"})
 //	})
 //	http.ListenAndServe(":9005", nil)
 
@@ -56,7 +56,8 @@ func (this *Render) GetHTML(name string) *HTML {
 	return r
 }
 
-func (this *Render) HTML(w http.ResponseWriter, name string, data interface{}) {
+func (this *Render) HTML(w http.ResponseWriter, status int, name string, data interface{}) {
+	w.WriteHeader(status)
 	this.GetHTML(name).ExecuteWriter(w, data)
 }
 
