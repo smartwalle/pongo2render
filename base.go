@@ -6,12 +6,12 @@ import (
 	"github.com/flosch/pongo2"
 )
 
-	//var render = pongo2render.NewRender("./templates")
-	//
-	//http.HandleFunc("/m", func(w http.ResponseWriter, req *http.Request) {
-	//	render.Template("index.html").ExecuteWriter(w, pongo2.Context{"aa": "eeeeeee"})
-	//})
-	//http.ListenAndServe(":9005", nil)
+//	var render = pongo2render.NewRender("./templates")
+//
+//	http.HandleFunc("/m", func(w http.ResponseWriter, req *http.Request) {
+//		render.Template("index.html").ExecuteWriter(w, pongo2.Context{"aa": "eeeeeee"})
+//	})
+//	http.ListenAndServe(":9005", nil)
 
 var htmlContentType = []string{"text/html; charset=utf-8"}
 
