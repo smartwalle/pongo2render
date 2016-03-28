@@ -9,7 +9,7 @@ import (
 //	var render = pongo2render.NewRender("./templates")
 //
 //	http.HandleFunc("/m", func(w http.ResponseWriter, req *http.Request) {
-//		render.HTML("index.html").ExecuteWriter(w, pongo2.Context{"aa": "eeeeeee"})
+//		render.HTML(w, "index.html", pongo2.Context{"aa": "eeeeeee"})
 //	})
 //	http.ListenAndServe(":9005", nil)
 
@@ -31,7 +31,7 @@ func NewRender(templateDir string) *Render {
 	return r
 }
 
-func (this *Render) HTML(name string) *HTML {
+func (this *Render) html(name string) *HTML {
 	var template *pongo2.Template
 	var filename string
 	if len(this.TemplateDir) > 0 {
@@ -54,6 +54,10 @@ func (this *Render) HTML(name string) *HTML {
 	var r = &HTML{}
 	r.Template = template
 	return r
+}
+
+func (this *Render) HTML(w http.ResponseWriter, name string, data interface{}) {
+	this.html(name).ExecuteWriter(w, data)
 }
 
 func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {

@@ -23,7 +23,7 @@ type martinRender struct {
 }
 
 func (this *martinRender) HTML(name string, data interface{}) {
-	this.render.HTML(name).ExecuteWriter(this.res, data)
+	this.render.html(name).ExecuteWriter(this.res, data)
 }
 
 func NewMartinRender(templateDir string, cache bool) martini.Handler {

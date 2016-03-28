@@ -30,7 +30,7 @@ func NewGinRender(templateDir string) *GinRender {
 
 func (this GinRender) Instance(name string, data interface{}) render.Render {
 	var gHtml = &GinHTML{}
-	var h = this.HTML(name)
+	var h = this.html(name)
 	gHtml.HTML = h
 	gHtml.data = data
 	return gHtml
