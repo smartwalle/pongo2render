@@ -9,7 +9,7 @@ import (
 //	var render = pongo2render.NewRender("./templates")
 //
 //	http.HandleFunc("/m", func(w http.ResponseWriter, req *http.Request) {
-//		render.Template("index.html").ExecuteWriter(w, pongo2.Context{"aa": "eeeeeee"})
+//		render.HTML("index.html").ExecuteWriter(w, pongo2.Context{"aa": "eeeeeee"})
 //	})
 //	http.ListenAndServe(":9005", nil)
 
@@ -56,9 +56,9 @@ func (this *Render) HTML(name string) *HTML {
 	return r
 }
 
-func (this *HTML) ExecuteWriter(w http.ResponseWriter, c pongo2.Context) (err error) {
+func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {
 	WriteContentType(w, htmlContentType)
-	this.context = c
+	this.context = DataToContext(data)
 	err = this.Template.ExecuteWriter(this.context, w)
 	return err
 }
@@ -68,4 +68,17 @@ func WriteContentType(w http.ResponseWriter, value []string) {
 	if val := header["Content-Type"]; len(val) == 0 {
 		header["Content-Type"] = value
 	}
+}
+
+func DataToContext(data interface{}) pongo2.Context {
+	var ctx pongo2.Context
+	if data != nil {
+		switch data.(type) {
+		case pongo2.Context:
+			ctx = data.(pongo2.Context)
+		case map[string]interface{}:
+			ctx = pongo2.Context(data.(map[string]interface{}))
+		}
+	}
+	return ctx
 }

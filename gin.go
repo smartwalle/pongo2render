@@ -3,7 +3,6 @@ package pongo2render
 import (
 	"net/http"
 	"github.com/gin-gonic/gin/render"
-	"github.com/flosch/pongo2"
 )
 
 //	var router = gin.Default()
@@ -20,6 +19,7 @@ type GinRender struct {
 
 type GinHTML struct {
 	*HTML
+	data interface{}
 }
 
 func NewGinRender(templateDir string) *GinRender {
@@ -31,16 +31,12 @@ func NewGinRender(templateDir string) *GinRender {
 func (this GinRender) Instance(name string, data interface{}) render.Render {
 	var gHtml = &GinHTML{}
 	var h = this.HTML(name)
-
-	if data != nil {
-		h.context = data.(pongo2.Context)
-	}
-
 	gHtml.HTML = h
+	gHtml.data = data
 	return gHtml
 }
 
 func (this *GinHTML) Render(w http.ResponseWriter) (err error) {
-	return this.HTML.ExecuteWriter(w, this.context)
+	return this.HTML.ExecuteWriter(w, this.data)
 }
 
