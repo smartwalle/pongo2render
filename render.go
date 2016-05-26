@@ -41,9 +41,9 @@ func (this *Render) GetHTML(name string) *HTML {
 	}
 
 	if this.Cache {
-		template, _ = pongo2.FromCache(filename)
+		template  = pongo2.Must(pongo2.FromCache(filename))
 	} else {
-		template, _ = pongo2.FromFile(filename)
+		template  = pongo2.Must(pongo2.FromFile(filename))
 	}
 
 	if template == nil {
