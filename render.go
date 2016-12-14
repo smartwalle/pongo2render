@@ -61,6 +61,10 @@ func (this *Render) HTML(w http.ResponseWriter, status int, name string, data in
 	this.GetHTML(name).ExecuteWriter(w, data)
 }
 
+func (this *Render) String(name string, data interface{}) (string, error) {
+	return this.GetHTML(name).Execute(data)
+}
+
 func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {
 	WriteContentType(w, htmlContentType)
 	this.context = DataToContext(data)
@@ -70,7 +74,7 @@ func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err er
 
 func (this *HTML) Execute(data interface{}) (string, error) {
 	this.context = DataToContext(data)
-	return this.Template.Execute(data)
+	return this.Template.Execute(this.context)
 }
 
 func WriteContentType(w http.ResponseWriter, value []string) {
