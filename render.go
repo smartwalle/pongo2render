@@ -68,6 +68,11 @@ func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err er
 	return err
 }
 
+func (this *HTML) Execute(data interface{}) (string, error) {
+	this.context = DataToContext(data)
+	return this.Template.Execute(data)
+}
+
 func WriteContentType(w http.ResponseWriter, value []string) {
 	header := w.Header()
 	if val := header["Content-Type"]; len(val) == 0 {
