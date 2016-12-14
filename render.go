@@ -20,18 +20,13 @@ type Render struct {
 	Cache       bool
 }
 
-type HTML struct {
-	Template *pongo2.Template
-	context  pongo2.Context
-}
-
 func NewRender(templateDir string) *Render {
 	var r = &Render{}
 	r.TemplateDir = templateDir
 	return r
 }
 
-func (this *Render) GetHTML(name string) *HTML {
+func (this *Render) Template(name string) *Template {
 	var template *pongo2.Template
 	var filename string
 	if len(this.TemplateDir) > 0 {
@@ -41,9 +36,9 @@ func (this *Render) GetHTML(name string) *HTML {
 	}
 
 	if this.Cache {
-		template  = pongo2.Must(pongo2.FromCache(filename))
+		template  = pongo2.Must(pongo2.DefaultSet.FromCache(filename))
 	} else {
-		template  = pongo2.Must(pongo2.FromFile(filename))
+		template  = pongo2.Must(pongo2.DefaultSet.FromFile(filename))
 	}
 
 	if template == nil {
@@ -51,30 +46,39 @@ func (this *Render) GetHTML(name string) *HTML {
 		return nil
 	}
 
-	var r = &HTML{}
-	r.Template = template
+	var r = &Template{}
+	r.template = template
+	return r
+}
+
+func (this *Render) TemplateFromString(tpl string) *Template {
+	var template = pongo2.Must(pongo2.DefaultSet.FromString(tpl))
+	var r = &Template{}
+	r.template = template
 	return r
 }
 
 func (this *Render) HTML(w http.ResponseWriter, status int, name string, data interface{}) {
 	w.WriteHeader(status)
-	this.GetHTML(name).ExecuteWriter(w, data)
+	this.Template(name).ExecuteWriter(w, data)
 }
 
-func (this *Render) String(name string, data interface{}) (string, error) {
-	return this.GetHTML(name).Execute(data)
+////////////////////////////////////////////////////////////////////////////////
+type Template struct {
+	template *pongo2.Template
+	context  pongo2.Context
 }
 
-func (this *HTML) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {
+func (this *Template) ExecuteWriter(w http.ResponseWriter, data interface{}) (err error) {
 	WriteContentType(w, htmlContentType)
 	this.context = DataToContext(data)
-	err = this.Template.ExecuteWriter(this.context, w)
+	err = this.template.ExecuteWriter(this.context, w)
 	return err
 }
 
-func (this *HTML) Execute(data interface{}) (string, error) {
+func (this *Template) Execute(data interface{}) (string, error) {
 	this.context = DataToContext(data)
-	return this.Template.Execute(this.context)
+	return this.template.Execute(this.context)
 }
 
 func WriteContentType(w http.ResponseWriter, value []string) {
