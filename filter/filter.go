@@ -3,19 +3,23 @@ package filter
 import (
 	"reflect"
 	"github.com/flosch/pongo2"
+	"strings"
 )
 
 func init() {
-	pongo2.RegisterFilter("GetValueWithMap", GetValueWithMap)
+	pongo2.RegisterFilter("ValueWithMap", ValueWithMap)
+	pongo2.RegisterFilter("HasPrefix", HasPrefix)
+	pongo2.RegisterFilter("HasSuffix", HasSuffix)
 }
 
-func GetValueWithMap(in, param *pongo2.Value) (out *pongo2.Value, err *pongo2.Error) {
-	var v = getValueWithMap(in.Interface(), param.Interface())
+////////////////////////////////////////////////////////////////////////////////
+func ValueWithMap(in, param *pongo2.Value) (out *pongo2.Value, err *pongo2.Error) {
+	var v = valueWithMap(in.Interface(), param.Interface())
 	out = pongo2.AsValue(v)
 	return out, err
 }
 
-func getValueWithMap(source, key interface{}) interface{} {
+func valueWithMap(source, key interface{}) interface{} {
 	if source == nil {
 		return nil
 	}
@@ -34,4 +38,13 @@ func getValueWithMap(source, key interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+////////////////////////////////////////////////////////////////////////////////
+func HasPrefix(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	return pongo2.AsValue(strings.HasPrefix(in.String(), param.String())), nil
+}
+
+func HasSuffix(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
+	return pongo2.AsValue(strings.HasSuffix(in.String(), param.String())), nil
 }
