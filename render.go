@@ -13,6 +13,7 @@ import (
 //	})
 //	http.ListenAndServe(":9005", nil)
 
+// --------------------------------------------------------------------------------
 var htmlContentType = []string{"text/html; charset=utf-8"}
 
 type Render struct {
@@ -63,7 +64,7 @@ func (this *Render) HTML(w http.ResponseWriter, status int, name string, data in
 	this.Template(name).ExecuteWriter(w, data)
 }
 
-////////////////////////////////////////////////////////////////////////////////
+// --------------------------------------------------------------------------------
 type Template struct {
 	template *pongo2.Template
 	context  pongo2.Context
@@ -81,6 +82,7 @@ func (this *Template) Execute(data interface{}) (string, error) {
 	return this.template.Execute(this.context)
 }
 
+// --------------------------------------------------------------------------------
 func WriteContentType(w http.ResponseWriter, value []string) {
 	header := w.Header()
 	if val := header["Content-Type"]; len(val) == 0 {
