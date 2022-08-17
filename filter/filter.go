@@ -1,8 +1,8 @@
 package filter
 
 import (
+	"github.com/flosch/pongo2/v6"
 	"reflect"
-	"github.com/flosch/pongo2"
 	"strings"
 )
 

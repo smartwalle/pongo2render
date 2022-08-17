@@ -1,9 +1,9 @@
 package pongo2render
 
 import (
-	"path"
+	"github.com/flosch/pongo2/v6"
 	"net/http"
-	"github.com/flosch/pongo2"
+	"path"
 )
 
 //	var render = pongo2render.NewRender("./templates")
@@ -13,7 +13,6 @@ import (
 //	})
 //	http.ListenAndServe(":9005", nil)
 
-// --------------------------------------------------------------------------------
 var htmlContentType = []string{"text/html; charset=utf-8"}
 
 type Render struct {
@@ -37,9 +36,9 @@ func (this *Render) Template(name string) *Template {
 	}
 
 	if this.Cache {
-		template  = pongo2.Must(pongo2.DefaultSet.FromCache(filename))
+		template = pongo2.Must(pongo2.DefaultSet.FromCache(filename))
 	} else {
-		template  = pongo2.Must(pongo2.DefaultSet.FromFile(filename))
+		template = pongo2.Must(pongo2.DefaultSet.FromFile(filename))
 	}
 
 	if template == nil {
@@ -64,7 +63,6 @@ func (this *Render) HTML(w http.ResponseWriter, status int, name string, data in
 	this.Template(name).ExecuteWriter(w, data)
 }
 
-// --------------------------------------------------------------------------------
 type Template struct {
 	template *pongo2.Template
 	context  pongo2.Context
@@ -82,7 +80,6 @@ func (this *Template) Execute(data interface{}) (string, error) {
 	return this.template.Execute(this.context)
 }
 
-// --------------------------------------------------------------------------------
 func WriteContentType(w http.ResponseWriter, value []string) {
 	header := w.Header()
 	if val := header["Content-Type"]; len(val) == 0 {
@@ -97,7 +94,7 @@ func DataToContext(data interface{}) pongo2.Context {
 		case pongo2.Context:
 			ctx = data.(pongo2.Context)
 		case map[string]interface{}:
-			ctx = pongo2.Context(data.(map[string]interface{}))
+			ctx = data.(map[string]interface{})
 		}
 	}
 	return ctx
