@@ -13,7 +13,6 @@ func init() {
 	pongo2.RegisterFilter("CompareString", compareString)
 }
 
-////////////////////////////////////////////////////////////////////////////////
 func valueWithMap(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	var source = in.Interface()
 	var key = param.Interface()
@@ -41,7 +40,6 @@ func valueWithMap(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return nil, nil
 }
 
-////////////////////////////////////////////////////////////////////////////////
 func hasPrefix(in, param *pongo2.Value) (*pongo2.Value, *pongo2.Error) {
 	return pongo2.AsValue(strings.HasPrefix(in.String(), param.String())), nil
 }
